@@ -2,7 +2,7 @@ import type { Contribution } from './github.ts'
 
 const palette = Object.freeze({
   darkCanvas: '#0d1117',
-  darkBorder: '#30363d',
+  darkBorder: '#3d444d',
   darkLink: '#4493f8',
   darkMuted: '#9198a1',
   darkMerged: '#ab7df8',
@@ -61,6 +61,7 @@ const wrap = (text: string): string[] => {
 type Card = {
   height: number
   body: string
+  footer: string
 }
 
 const repoIcon =
@@ -116,26 +117,27 @@ const renderCard = (contribution: Contribution): Card => {
 
   y += 8
   let x = padding
+  const footer: string[] = []
   const language = repository.primaryLanguage
 
   if (language) {
     const color = language.color ?? palette.fallbackLanguage
-    parts.push(`<circle cx="${x + 6}" cy="${y - 4}" r="6" fill="${color}"/>`)
-    parts.push(`<text class="small muted" x="${x + 16}" y="${y}">${escape(language.name)}</text>`)
+    footer.push(`<circle cx="${x + 6}" cy="${y - 4}" r="6" fill="${color}"/>`)
+    footer.push(`<text class="small muted" x="${x + 16}" y="${y}">${escape(language.name)}</text>`)
     x += 28 + language.name.length * 7
   }
 
   const stars = formatCount(repository.stargazerCount)
-  parts.push(icon(starIcon, x, y - 12, 'muted'))
-  parts.push(`<text class="small muted" x="${x + 20}" y="${y}">${stars}</text>`)
+  footer.push(icon(starIcon, x, y - 12, 'muted'))
+  footer.push(`<text class="small muted" x="${x + 20}" y="${y}">${stars}</text>`)
   x += 34 + stars.length * 7
 
   if (repository.forkCount > 0) {
-    parts.push(icon(forkIcon, x, y - 12, 'muted'))
-    parts.push(`<text class="small muted" x="${x + 20}" y="${y}">${formatCount(repository.forkCount)}</text>`)
+    footer.push(icon(forkIcon, x, y - 12, 'muted'))
+    footer.push(`<text class="small muted" x="${x + 20}" y="${y}">${formatCount(repository.forkCount)}</text>`)
   }
 
-  return { height: y + padding, body: parts.join('') }
+  return { height: y + padding, body: parts.join(''), footer: footer.join('') }
 }
 
 const style = [
@@ -167,7 +169,9 @@ export const renderContributions = (contributions: Contribution[]): string => {
     for (const [index, card] of row.entries()) {
       const x = index * (cardWidth + gap)
       const frame = `<rect class="card" width="${cardWidth}" height="${height}" rx="6"/>`
-      groups.push(`<g transform="translate(${x + 0.5} ${y + 0.5})">${frame}${card.body}</g>`)
+      // A shorter card's footer drops to the row's bottom edge, as GitHub's pinned cards do.
+      const footer = `<g transform="translate(0 ${height - card.height})">${card.footer}</g>`
+      groups.push(`<g transform="translate(${x + 0.5} ${y + 0.5})">${frame}${card.body}${footer}</g>`)
     }
 
     y += height + gap
