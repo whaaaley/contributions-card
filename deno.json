@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "lib": ["esnext", "deno.ns", "deno.shared_globals"],
+    "types": ["npm:@cloudflare/workers-types@5.20261007.1/index.d.ts"]
+  },
+  "imports": {
+    "zod": "npm:zod@4.6.5"
+  },
+  "fmt": {
+    "lineWidth": 120,
+    "semiColons": false,
+    "singleQuote": true
+  },
+  "tasks": {
+    "dev": "deno run -A npm:cf@1.0.0-beta.14 dev",
+    "build": "deno run -A npm:cf@1.0.0-beta.14 build",
+    "deploy": "deno run -A npm:cf@1.0.0-beta.14 deploy",
+    "preview": "deno run --env-file=.dev.vars -A scripts/preview.ts",
+    "check": "deno check src/ scripts/",
+    "test": "deno test src/"
+  }
+}

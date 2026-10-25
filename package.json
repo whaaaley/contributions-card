@@ -1,0 +1,15 @@
+{
+  "name": "contributions-card",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "2.0.0-beta.sha-52b0dc0e9",
+    "@cloudflare/workers-types": "5.20261007.1",
+    "cf": "1.0.0-beta.14",
+    "vite": "8.3.3",
+    "wrangler": "4.148.0"
+  }
+}

@@ -1,0 +1,7 @@
+.dev.vars*
+.env*
+.cloudflare/
+.wrangler/
+node_modules/
+dist/
+preview.svg
