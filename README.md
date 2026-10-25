@@ -6,6 +6,7 @@ It serves the contributions section of a GitHub profile README.
 ## What it does
 
 The Worker answers `GET /contributions.svg` with the token owner's contributions, most starred repository first.
+`GET /` serves a page centering that card on GitHub's background color, for a README image to link to.
 A repository counts when it is public, sits outside the token owner's account and every org they belong to, and either merged one of their pull requests or carries their commits from a pull request closed unmerged, as when a maintainer lands a patch by hand.
 Each card lists the pull requests behind it, and `src/render.ts` sets how many cards and pull requests show.
 The rendered SVG is cached for the time `CACHE_SECONDS` in `cloudflare.config.ts` sets.
